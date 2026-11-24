@@ -114,6 +114,15 @@ export default function App(){
   <main className="main-content">
    <div className="topbar"><div><span className="eyebrow">CLAN SNT · SINIESTRO</span><h1>{page==='home'?'Eventos oficiales':page==='events'?'Todos los eventos':page==='calendar'?'Calendario SNT':page==='create'?'Crear evento':page==='admins'?'Administradores':'Menú'}</h1></div><div className="local-clock"><Icon name="clock"/><div><small>Tu hora local</small><strong>{new Intl.DateTimeFormat('es',{hour:'numeric',minute:'2-digit',second:'2-digit',hourCycle:'h12'}).format(clock)}</strong><span>{tz.replaceAll('_',' ')} · {Intl.DateTimeFormat().resolvedOptions().timeZone}</span></div></div></div>
    {notice&&<div className="notice" onClick={()=>setNotice('')}>{notice} ×</div>}
+   {page==='menu'&&<section className="panel mobile-menu-panel"><span className="eyebrow">NAVEGACIÓN SNT</span><h2>Menú principal</h2><nav className="mobile-menu-links">
+    <button onClick={()=>setPage('home')}>⌂ <span>Inicio</span></button>
+    <button onClick={()=>setPage('events')}>▦ <span>Eventos</span></button>
+    <button onClick={()=>setPage('calendar')}>▣ <span>Calendario</span></button>
+    {admin&&<button onClick={()=>setPage('create')}>＋ <span>Crear evento</span></button>}
+    {profile?.role==='owner'&&<button onClick={()=>setPage('admins')}>♛ <span>Usuarios y roles</span></button>}
+    {!admin&&<button onClick={()=>setShowLogin(true)}>⚙ <span>Acceso administrativo</span></button>}
+    {admin&&<button onClick={logout}>↪ <span>Cerrar sesión</span></button>}
+   </nav></section>}
    {page==='home'&&<><section className="hero-banner"><div className="hero-lines"/><Logo/><div className="hero-copy"><span>CALENDARIO DE ACTIVIDADES</span><h2>La próxima leyenda<br/>se escribe en equipo.</h2><p>Prepárate para competir, compartir y representar a SNT.</p></div><div className="hero-orbit">SNT<br/><b>✦</b></div></section>
     <div className="section-heading"><div><span className="eyebrow">NO TE LO PIERDAS</span><h2>Próximos eventos</h2></div><button className="text-button" onClick={()=>setPage('events')}>Ver todos <b>→</b></button></div>
     {upcoming.length?<div className="events-list">{upcoming.slice(0,4).map(e=><EventRow key={e.id} event={e}/>)}</div>:<div className="empty-state"><Icon name="calendar"/><h3>Aún no hay eventos publicados</h3><p>Cuando el equipo SNT programe una actividad, aparecerá aquí.</p></div>}
