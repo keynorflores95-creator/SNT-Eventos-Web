@@ -28,15 +28,30 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: 'Solo el propietario y los administradores activos pueden enviar alertas.' });
     }
 
-    const title = String(req.body?.title || '').trim().slice(0, 80);
-    const body = String(req.body?.body || '').trim().slice(0, 240);
-    const target = req.body?.target === 'admins' ? 'admins' : 'all';
-    const url = typeof req.body?.url === 'string' && req.body.url.startsWith('/') ? req.body.url : '/';
-    if (!title || !body) return res.status(400).json({ error: 'Escribe un título y un mensaje.' });
+    const action = req.body?.action;
+    let title = '';
+    let body = '';
+    let url = '/';
+    let eventTitle = '';
+    if (action === 'next-event') {
+      const { data: event, error: eventError } = await supabase
+        .from('events').select('id,title,description,starts_at,roblox_url')
+        .eq('status','published').gt('starts_at',new Date().toISOString())
+        .order('starts_at',{ascending:true}).limit(1).maybeSingle();
+      if (eventError) return res.status(500).json({ error: 'No se pudo consultar el próximo evento: '+eventError.message });
+      if (!event) return res.status(404).json({ error: 'No hay eventos futuros publicados.' });
+      eventTitle = event.title;
+      const when = new Intl.DateTimeFormat('es',{dateStyle:'full',timeStyle:'short',hourCycle:'h12',timeZone:'America/Managua'}).format(new Date(event.starts_at));
+      title = '¡SNT tiene un evento próximo!';
+      body = event.title+' · '+when+(event.description?' · '+event.description.slice(0,100):'');
+      url = event.roblox_url && event.roblox_url.startsWith('https://') ? event.roblox_url : '/';
+    } else {
+      return res.status(400).json({ error: 'Acción de notificación no reconocida.' });
+    }
 
     const { data: rows, error: targetsError } = await supabase.rpc('get_snt_push_targets');
     if (targetsError) return res.status(403).json({ error: targetsError.message });
-    const selected = (rows || []).filter(row => target === 'all' || row.role === 'admin' || row.role === 'owner');
+    const selected = rows || [];
 
     webpush.setVapidDetails(process.env.VAPID_SUBJECT, process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY);
     const payload = JSON.stringify({ title, body, url, tag: 'snt-alert-' + Date.now() });
@@ -45,7 +60,7 @@ export default async function handler(req, res) {
     ));
     const sent = results.filter(x => x.status === 'fulfilled').length;
     const failed = results.length - sent;
-    return res.status(200).json({ ok: true, sent, failed, total: selected.length, target });
+    return res.status(200).json({ ok: true, sent, failed, total: selected.length, eventTitle });
   } catch (error) {
     console.error('SNT push error:', error);
     return res.status(500).json({ error: 'No se pudo completar el envío de notificaciones.' });
