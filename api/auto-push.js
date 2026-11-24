@@ -70,7 +70,7 @@ export default async function handler(req, res) {
           const status = Number(result.reason?.statusCode || 0);
           const key = status ? String(status) : 'network';
           errorsByStatus[key] = (errorsByStatus[key] || 0) + 1;
-          if (status === 404 || status === 410) invalidIds.push(targets[i].id);
+          if (status === 403 || status === 404 || status === 410) invalidIds.push(targets[i].id);
         }
       }
 
