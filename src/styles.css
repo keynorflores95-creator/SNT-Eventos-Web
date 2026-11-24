@@ -76,3 +76,14 @@
  .hero-copy{max-width:78%}
  .hero-copy h2{font-size:20px}
 }
+
+/* Fix logo rendering and compact admin alert */
+.brand-image img{width:100%;height:auto;max-width:164px;object-fit:contain;display:block}
+.mobile-top .brand-image{width:50px;height:50px;border:0;box-shadow:none;background:transparent;overflow:visible}
+.mobile-top .brand-image img{width:50px;height:50px;object-fit:contain;border-radius:0}
+.hero-banner>.brand-image{width:170px;min-width:0}
+.next-event-alert{display:grid;gap:7px;padding:17px;margin:18px 0;border:1px solid #71303b;border-radius:13px;background:linear-gradient(120deg,#260b12,#0d090b)}
+.next-event-alert strong{font-size:18px;color:#fff}
+.next-event-alert span{font-size:13px;color:#d8b9c0}
+.alert-send-button{width:100%;font-size:16px;padding:14px}
+@media(max-width:760px){.mobile-top .brand-image{width:42px;height:42px}.mobile-top .brand-image img{width:42px;height:42px}.hero-banner>.brand-image{width:76px}.hero-banner>.brand-image img{max-width:76px}}
