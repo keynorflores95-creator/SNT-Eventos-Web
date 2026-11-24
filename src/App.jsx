@@ -7,7 +7,8 @@ const demoEvents = [
   { id:'demo-3', title:'Noche SNT - DJ Session', description:'Música, roles y ambiente del clan', category:'Social', starts_at:future(4,20), roblox_url:'', status:'published', organizer:'SNT' }
 ];
 function future(days, hour) { const d = new Date(); d.setDate(d.getDate()+days); d.setHours(hour,0,0,0); return d.toISOString(); }
-const fmt = (date, options={}) => new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short',...options}).format(new Date(date));
+// Evita combinar dateStyle/timeStyle con opciones individuales de Intl, lo que lanza RangeError y deja la app en blanco.
+const fmt = (date, options) => new Intl.DateTimeFormat(undefined, options && Object.keys(options).length ? options : {dateStyle:'medium',timeStyle:'short'}).format(new Date(date));
 function countdown(date) {
   const ms = Math.max(0,new Date(date).getTime()-Date.now());
   const days=Math.floor(ms/86400000), hours=Math.floor(ms%86400000/3600000), mins=Math.floor(ms%3600000/60000), secs=Math.floor(ms%60000/1000);
