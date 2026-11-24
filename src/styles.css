@@ -103,3 +103,9 @@
  .event-link{grid-column:1;grid-row:auto;padding:3px 2px}
 }
 @media(max-width:390px){.event-thumb{height:190px}.event-row{padding:10px}}
+
+.event-alert-control{display:flex;align-items:center;gap:8px;margin-top:11px;min-height:28px}
+.event-bell-button{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #a52b43;border-radius:50%;background:#210a10;color:#ff657b;cursor:pointer;padding:0}
+.event-bell-button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.event-bell-button:disabled{opacity:.42;cursor:not-allowed}
+.event-alert-control small{font-size:10px;color:#c5aeb4}
