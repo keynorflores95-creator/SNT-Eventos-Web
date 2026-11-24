@@ -1,0 +1,15 @@
+{
+  "id": "/",
+  "name": "SNT Eventos — Siniestro",
+  "short_name": "SNT Eventos",
+  "description": "Calendario oficial de actividades del clan SNT.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080607",
+  "theme_color": "#090607",
+  "icons": [
+    { "src": "/snt-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
