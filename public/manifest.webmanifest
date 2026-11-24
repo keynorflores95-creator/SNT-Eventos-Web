@@ -11,9 +11,9 @@
   "theme_color": "#090607",
   "icons": [
     {
-      "src": "/snt-logo.webp",
-      "sizes": "128x128",
-      "type": "image/webp",
+      "src": "/snt-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any"
     },
     {
