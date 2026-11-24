@@ -54,12 +54,27 @@ export default async function handler(req, res) {
       eventId: event.id
     });
     const results = await Promise.allSettled(selected.map(row =>
-      webpush.sendNotification(row.subscription,payload,{TTL:60*60*12})
+      webpush.sendNotification(row.subscription,payload,{TTL:60*60*12,urgency:'high'})
     ));
-    const sent = results.filter(x=>x.status==='fulfilled').length;
-    const failedResults = results.filter(x=>x.status==='rejected');
-    const failed = failedResults.length;
-    return res.status(200).json({ok:true,sent,failed,total:selected.length,eventTitle:event.title,nextAllowedAt:claim.next_allowed_at});
+    let sent = 0;
+    const invalidIds = [];
+    const errorsByStatus = {};
+    results.forEach((result,index)=>{
+      if(result.status==='fulfilled'){sent++;return;}
+      const status = Number(result.reason?.statusCode || 0);
+      const key = status ? String(status) : 'network';
+      errorsByStatus[key] = (errorsByStatus[key] || 0) + 1;
+      if(status===404 || status===410) invalidIds.push(selected[index].id);
+    });
+    let removedExpired = 0;
+    if(invalidIds.length){
+      const {data:removed,error:cleanupError}=await supabase.rpc('remove_snt_invalid_push_subscriptions',{p_ids:invalidIds});
+      if(!cleanupError) removedExpired=Number(removed||0);
+      else console.error('SNT stale subscription cleanup failed:',cleanupError.message);
+    }
+    const failed = selected.length-sent;
+    console.log('SNT manual push report:',JSON.stringify({eventId:event.id,sent,failed,total:selected.length,errorsByStatus,removedExpired}));
+    return res.status(200).json({ok:true,sent,failed,total:selected.length,errorsByStatus,removedExpired,eventTitle:event.title,nextAllowedAt:claim.next_allowed_at});
   } catch (error) {
     console.error('SNT push error:',error);
     return res.status(500).json({error:'No se pudo completar el envío de notificaciones.'});
