@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs><radialGradient id="bg"><stop stop-color="#351018"/><stop offset="1" stop-color="#050405"/></radialGradient><linearGradient id="metal" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".48" stop-color="#9b9b9b"/><stop offset="1" stop-color="#f7f7f7"/></linearGradient></defs>
+<rect width="512" height="512" rx="104" fill="url(#bg)"/><rect x="14" y="14" width="484" height="484" rx="92" fill="none" stroke="#f21d37" stroke-width="10"/>
+<path d="M158 117 183 62l72 43 72-43 27 55-27 40H185z" fill="#dca84b" stroke="#fff0b0" stroke-width="8"/><text x="256" y="246" font-family="Georgia,serif" font-size="150" font-weight="bold" text-anchor="middle" fill="url(#metal)" stroke="#5d101b" stroke-width="5">SNT</text>
+<text x="256" y="296" font-family="Arial,sans-serif" font-size="31" font-weight="bold" letter-spacing="12" text-anchor="middle" fill="#ff3b55">SINIESTRO</text>
+<rect x="82" y="330" width="348" height="110" rx="22" fill="#160b0e" stroke="#f21d37" stroke-width="8"/>
+<g fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"><rect x="145" y="354" width="222" height="62" rx="9"/><path d="M190 340v27m132-27v27M145 378h222"/></g>
+<g fill="#f21d37"><circle cx="190" cy="397" r="9"/><circle cx="256" cy="397" r="9"/><circle cx="322" cy="397" r="9"/></g></svg>
