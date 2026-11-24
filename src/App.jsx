@@ -54,6 +54,7 @@ export default function App(){
  const [newUserName,setNewUserName]=useState('');
  const [newUserEmail,setNewUserEmail]=useState('');
  const [newUserPassword,setNewUserPassword]=useState('');
+ const [ownerNewPassword,setOwnerNewPassword]=useState('');
  const [managedError,setManagedError]=useState('');
  const [ownerRecoveryToken,setOwnerRecoveryToken]=useState(()=>new URLSearchParams(window.location.search).get('owner_reset')||'');
  const [ownerRecoveryPassword,setOwnerRecoveryPassword]=useState('');
@@ -96,6 +97,7 @@ export default function App(){
   async function finishOwnerRecovery(e){e.preventDefault();setBusy(true);setError('');try{const {data,error}=await supabase.functions.invoke('owner-user-admin',{body:{action:'owner-recovery',token:ownerRecoveryToken,password:ownerRecoveryPassword}});if(error)throw new Error(error.message);if(data?.error)throw new Error(data.error);setOwnerRecoveryToken('');setOwnerRecoveryPassword('');window.history.replaceState({},'',window.location.pathname);setNotice('Contraseña del propietario actualizada. Ya puedes iniciar sesión.')}catch(e){setError(e.message||'No se pudo cambiar la contraseña.')}finally{setBusy(false)}}
  async function callOwnerAdmin(payload){const {data,error}=await supabase.functions.invoke('owner-user-admin',{body:payload});if(error)throw new Error(error.message);if(data?.error)throw new Error(data.error);return data}
  async function loadManagedUsers(){setManagedLoading(true);setManagedError('');try{const data=await callOwnerAdmin({action:'list'});setManagedUsers(data.users||[])}catch(e){setManagedError(e.message||'No se pudieron cargar las cuentas.')}finally{setManagedLoading(false)}}
+ async function changeOwnerPassword(e){e.preventDefault();setBusy(true);setManagedError('');try{await callOwnerAdmin({action:'change-own-password',password:ownerNewPassword});setOwnerNewPassword('');setNotice('Tu contraseña principal se actualizó correctamente. Usa la nueva contraseña en tu próximo inicio de sesión.')}catch(e){setManagedError(e.message||'No se pudo cambiar tu contraseña.')}finally{setBusy(false)}}
  async function createManagedUser(e){e.preventDefault();setBusy(true);setManagedError('');try{await callOwnerAdmin({action:'create',full_name:newUserName,email:newUserEmail,password:newUserPassword,role:'admin'});setNewUserName('');setNewUserEmail('');setNewUserPassword('');setNotice('Cuenta administrativa creada. Ya puede iniciar sesión.');await loadManagedUsers()}catch(e){setManagedError(e.message||'No se pudo crear la cuenta.')}finally{setBusy(false)}}
  async function saveManagedUser(row){setBusy(true);setManagedError('');try{await callOwnerAdmin({action:'update',id:row.id,full_name:row.full_name,email:row.email,role:row.role,active:row.active,password:row.new_password||undefined});setManagedUsers(rows=>rows.map(x=>x.id===row.id?{...x,new_password:''}:x));setNotice('Cuenta actualizada correctamente.')}catch(e){setManagedError(e.message||'No se pudo actualizar la cuenta.')}finally{setBusy(false)}}
  async function deleteManagedUser(row){if(!window.confirm('¿Eliminar definitivamente la cuenta de '+row.email+'? Esta acción no se puede deshacer.'))return;setBusy(true);setManagedError('');try{await callOwnerAdmin({action:'delete',id:row.id});setManagedUsers(rows=>rows.filter(x=>x.id!==row.id));setNotice('Cuenta eliminada.')}catch(e){setManagedError(e.message||'No se pudo eliminar la cuenta.')}finally{setBusy(false)}}
@@ -121,6 +123,10 @@ export default function App(){
    {page==='admins'&&profile?.role==='owner'&&<section className="panel form-panel owner-users-panel">
     <span className="eyebrow">CONTROL EXCLUSIVO DEL PROPIETARIO</span><h2>Administrar cuentas SNT</h2>
     <p className="muted">Crea cuentas, cambia correos y contraseñas, asigna rangos, suspende accesos o elimina usuarios. Solo el propietario puede entrar aquí.</p>
+    <form onSubmit={changeOwnerPassword} className="managed-create-form"><h3>Cambiar mi contraseña de propietario</h3>
+     <label>Nueva contraseña principal<input type="password" minLength="10" required value={ownerNewPassword} onChange={e=>setOwnerNewPassword(e.target.value)} placeholder="Mínimo 10 caracteres"/></label>
+     <button className="primary-button" disabled={busy}>{busy?'Actualizando…':'Actualizar mi contraseña'}</button>
+    </form>
     <form onSubmit={createManagedUser} className="managed-create-form"><h3>Crear nueva cuenta ADM</h3>
      <label>Nombre completo<input required value={newUserName} onChange={e=>setNewUserName(e.target.value)} placeholder="Nombre del integrante"/></label>
      <label>Correo electrónico<input required type="email" value={newUserEmail} onChange={e=>setNewUserEmail(e.target.value)} placeholder="correo@ejemplo.com"/></label>
