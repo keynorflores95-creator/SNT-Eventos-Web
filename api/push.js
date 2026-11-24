@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     const authorization = req.headers.authorization || '';
     const token = authorization.startsWith('Bearer ') ? authorization.slice(7) : '';
     if (!token) return res.status(401).json({ error: 'Inicia sesión como propietario.' });
-    if (!supabaseUrl || !supabaseAnonKey || !process.env.VAPID_PUBLIC_KEY || !process.env.SNT_VAPID_PRIVATE_ENC || !process.env.VAPID_SUBJECT) {
+    if (!supabaseUrl || !supabaseAnonKey || !process.env.VAPID_PUBLIC_KEY || !process.env.SNT_VAPID_PRIVATE_KEY_V2 || !process.env.VAPID_SUBJECT) {
       return res.status(503).json({ error: 'El servicio push no está configurado correctamente.' });
     }
     const supabase = createClient(supabaseUrl, supabaseAnonKey, {
