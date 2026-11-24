@@ -24,8 +24,8 @@ export default async function handler(req, res) {
 
     const { data: profile, error: profileError } = await supabase
       .from('profiles').select('role,active').eq('id', authData.user.id).maybeSingle();
-    if (profileError || !profile?.active || !['owner', 'admin'].includes(profile.role)) {
-      return res.status(403).json({ error: 'Solo el propietario y los administradores activos pueden enviar alertas.' });
+    if (profileError || !profile?.active || profile.role !== 'owner') {
+      return res.status(403).json({ error: 'Solo el propietario puede enviar esta alerta.' });
     }
 
     const action = req.body?.action;
