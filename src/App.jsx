@@ -18,7 +18,7 @@ function Icon({name}) {
  const paths={calendar:'M8 2v4m8-4v4M3 10h18M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z',clock:'M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',swords:'m14.5 17.5 3 3L22 16l-3-3m-5-1 7-7-3-3-7 7m-1 7-7 7-3-3 7-7m-1-1 3 3',run:'M13 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM5 21l5-7 3 2 3 5m-6-7 2-5 4 2 3 0m-7-2 2-3',music:'M9 18V5l12-2v13M9 18a3 3 0 1 1-3-3c1.7 0 3 1.3 3 3Zm12-2a3 3 0 1 1-3-3c1.7 0 3 1.3 3 3Z',bell:'M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12a2 2 0 0 0 4 0',home:'m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z',users:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m7-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7-7a4 4 0 0 1 0 8m2 4a4 4 0 0 1 3 4v1',settings:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-6v3m0 14v3m10-10h-3M5 12H2m17.1-7.1-2.1 2.1M7 17l-2.1 2.1m14.2 0L17 17M7 7 4.9 4.9',plus:'M12 5v14m-7-7h14',logout:'M10 17l5-5-5-5m5 5H3m9-9h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7'};
  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d={paths[name]||paths.calendar}/></svg>;
 }
-function Logo(){return <div className="brand"><div className="crown">♛</div><div className="brand-word">SNT</div><div className="brand-sub">SINIESTRO</div></div>}
+function Logo(){return <div className="brand brand-image"><img src="/snt-logo.webp" alt="SNT Calendario de Eventos"/></div>}
 function EventRow({event,large=false}) {
  const [tick,setTick]=useState(0);
  useEffect(()=>{const id=setInterval(()=>setTick(x=>x+1),1000);return()=>clearInterval(id)},[]);
