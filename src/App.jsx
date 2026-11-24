@@ -43,6 +43,7 @@ export default function App(){
  const [page,setPage]=useState('home');
  const [user,setUser]=useState(null);
  const [profile,setProfile]=useState(null);
+ const [registeredDevices,setRegisteredDevices]=useState(null);
  const [showLogin,setShowLogin]=useState(false);
  const [resetMode,setResetMode]=useState(false);
  const [newPassword,setNewPassword]=useState('');
@@ -125,12 +126,13 @@ export default function App(){
  const admin=profile?.active&&(profile.role==='owner'||profile.role==='admin');
  useEffect(()=>{if(page==='admins'&&profile?.role==='owner')loadManagedUsers()},[page,profile?.role]);
  useEffect(()=>{if(profile?.role==='owner')refreshPushCooldowns()},[profile?.role]);
+ useEffect(()=>{if(profile?.role!=='owner'||!supabase){setRegisteredDevices(null);return}let live=true;const load=async()=>{const {data,error}=await supabase.rpc('get_snt_push_device_count');if(live&&!error&&typeof data==='number')setRegisteredDevices(data)};load();const id=setInterval(load,60000);return()=>{live=false;clearInterval(id)}},[profile?.role]);
  useEffect(()=>{const id=setInterval(()=>setPushClock(Date.now()),1000);return()=>clearInterval(id)},[]);
  return <div className="app-shell">
   <header className="mobile-top"><button className="menu-button" onClick={()=>setPage(page==='menu'?'home':'menu')}>☰</button><Logo/><button className="admin-entry" onClick={installApp}>Instalar</button><button className="admin-entry" onClick={()=>setShowLogin(true)}>Admin</button></header>
   <aside className="sidebar"><div className="side-brand"><Logo/><p>EVENTOS OFICIALES</p></div><nav>{[['home','Inicio','home'],['events','Eventos','calendar'],['calendar','Calendario','calendar'],...(admin?[['create','Crear evento','plus']]:[]),...(profile?.role==='owner'?[['notifications','Avisar próximo evento','bell']]:[]),...(profile?.role==='owner'?[['admins','Usuarios y roles','users']]:[])].map(([id,label,icon])=><button key={id} className={page===id?'active':''} onClick={()=>setPage(id)}><Icon name={icon}/>{label}</button>)}</nav><div className="side-bottom"><div className="side-status"><span/> Plataforma SNT</div><button onClick={()=>admin?logout():setShowLogin(true)}><Icon name={admin?'logout':'settings'}/>{admin?'Cerrar sesión':'Acceso administrativo'}</button></div></aside>
   <main className="main-content">
-   <div className="topbar"><div><span className="eyebrow">CLAN SNT · SINIESTRO</span><h1>{page==='home'?'Eventos oficiales':page==='events'?'Todos los eventos':page==='calendar'?'Calendario SNT':page==='create'?'Crear evento':page==='notifications'?'Centro de notificaciones':page==='admins'?'Administradores':'Menú'}</h1></div><div className="local-clock"><Icon name="clock"/><div><small>Tu hora local</small><strong>{new Intl.DateTimeFormat('es',{hour:'numeric',minute:'2-digit',second:'2-digit',hourCycle:'h12'}).format(clock)}</strong><span>{tz.replaceAll('_',' ')} · {Intl.DateTimeFormat().resolvedOptions().timeZone}</span></div></div></div>
+   <div className="topbar"><div><span className="eyebrow">CLAN SNT · SINIESTRO</span><h1>{page==='home'?'Eventos oficiales':page==='events'?'Todos los eventos':page==='calendar'?'Calendario SNT':page==='create'?'Crear evento':page==='notifications'?'Centro de notificaciones':page==='admins'?'Administradores':'Menú'}</h1>{profile?.role==='owner'&&<div className="device-count">● <strong>{registeredDevices===null?'—':registeredDevices}</strong> dispositivos con avisos</div>}</div><div className="local-clock"><Icon name="clock"/><div><small>Tu hora local</small><strong>{new Intl.DateTimeFormat('es',{hour:'numeric',minute:'2-digit',second:'2-digit',hourCycle:'h12'}).format(clock)}</strong><span>{tz.replaceAll('_',' ')} · {Intl.DateTimeFormat().resolvedOptions().timeZone}</span></div></div></div>
    {notice&&<div className="notice" onClick={()=>setNotice('')}>{notice} ×</div>}
    {page==='menu'&&<section className="panel mobile-menu-panel"><span className="eyebrow">NAVEGACIÓN SNT</span><h2>Menú principal</h2><nav className="mobile-menu-links">
     <button onClick={()=>setPage('home')}>⌂ <span>Inicio</span></button>
