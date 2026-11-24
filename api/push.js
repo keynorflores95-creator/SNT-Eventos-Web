@@ -41,10 +41,9 @@ export default async function handler(req, res) {
       if (eventError) return res.status(500).json({ error: 'No se pudo consultar el próximo evento: '+eventError.message });
       if (!event) return res.status(404).json({ error: 'No hay eventos futuros publicados.' });
       eventTitle = event.title;
-      const when = new Intl.DateTimeFormat('es',{dateStyle:'full',timeStyle:'short',hourCycle:'h12',timeZone:'America/Managua'}).format(new Date(event.starts_at));
-      title = '¡SNT tiene un evento próximo!';
-      body = event.title+' · '+when+(event.description?' · '+event.description.slice(0,100):'');
-      url = event.roblox_url && event.roblox_url.startsWith('https://') ? event.roblox_url : '/';
+      title = '¡Se acerca un evento SNT!';
+      body = event.title+' · Abre SNT para consultar la fecha y hora en tu zona.'+(event.description?' '+event.description.slice(0,75):'');
+      url = '/';
     } else {
       return res.status(400).json({ error: 'Acción de notificación no reconocida.' });
     }
