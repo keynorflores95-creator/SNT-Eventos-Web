@@ -1,25 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
 <defs>
- <radialGradient id="bg"><stop stop-color="#310912"/><stop offset=".72" stop-color="#100508"/><stop offset="1" stop-color="#020202"/></radialGradient>
- <linearGradient id="silver" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".38" stop-color="#aaa"/><stop offset=".58" stop-color="#fff"/><stop offset="1" stop-color="#5b5b5b"/></linearGradient>
- <linearGradient id="red" x2="0" y2="1"><stop stop-color="#ff8b96"/><stop offset=".5" stop-color="#f20b2d"/><stop offset="1" stop-color="#65000e"/></linearGradient>
- <linearGradient id="gold" x2="0" y2="1"><stop stop-color="#fff0a7"/><stop offset=".5" stop-color="#d68a21"/><stop offset="1" stop-color="#713b08"/></linearGradient>
- <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".28" stop-color="#dce0e5"/><stop offset=".53" stop-color="#747b86"/><stop offset=".72" stop-color="#f9fafb"/><stop offset="1" stop-color="#555b65"/></linearGradient>
+ <linearGradient id="ruby" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ff9ca9"/><stop offset=".42" stop-color="#ff2948"/><stop offset="1" stop-color="#760017"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff2b0"/><stop offset=".5" stop-color="#d69a32"/><stop offset="1" stop-color="#75420c"/></linearGradient>
+ <radialGradient id="bg"><stop stop-color="#310c15"/><stop offset=".72" stop-color="#100609"/><stop offset="1" stop-color="#030203"/></radialGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 </defs>
-<rect width="512" height="512" rx="100" fill="url(#bg)"/>
-<rect x="8" y="8" width="496" height="496" rx="94" fill="none" stroke="url(#red)" stroke-width="10" filter="url(#glow)"/>
-<path d="M145 100 171 46l63 43 22-54 23 54 63-43 25 54-28 39H172z" fill="url(#gold)" stroke="#fff0b0" stroke-width="5"/>
-<rect x="102" y="134" width="308" height="257" rx="36" fill="#080607" stroke="url(#silver)" stroke-width="12"/>
-<path d="M116 215h280" stroke="url(#red)" stroke-width="9" filter="url(#glow)"/>
-<text x="256" y="193" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="70" fill="url(#silver)" stroke="#39040d" stroke-width="2">SNT</text>
-<g fill="#12080a" stroke="url(#silver)" stroke-width="7">
- <rect x="129" y="235" width="75" height="59" rx="9"/><rect x="218" y="235" width="75" height="59" rx="9"/><rect x="307" y="235" width="75" height="59" rx="9"/>
- <rect x="129" y="306" width="75" height="59" rx="9"/><rect x="218" y="306" width="75" height="59" rx="9"/><rect x="307" y="306" width="75" height="59" rx="9"/>
+<rect width="512" height="512" rx="104" fill="url(#bg)"/>
+<rect x="8" y="8" width="496" height="496" rx="96" fill="none" stroke="url(#ruby)" stroke-width="9" filter="url(#glow)"/>
+<circle cx="256" cy="256" r="218" fill="none" stroke="#6e2736" stroke-width="2"/>
+<path d="M163 96 187 47l55 40 14-62 15 62 55-40 24 49-35 42H198z" fill="url(#gold)" stroke="#fff0b7" stroke-width="5"/>
+<g fill="#fff1ba"><circle cx="188" cy="48" r="5"/><circle cx="256" cy="25" r="6"/><circle cx="325" cy="48" r="5"/></g>
+<rect x="91" y="130" width="330" height="286" rx="38" fill="#080608" stroke="url(#metal)" stroke-width="12"/>
+<rect x="109" y="148" width="294" height="250" rx="24" fill="none" stroke="#7c1428" stroke-width="3"/>
+<path d="M118 223h276" stroke="url(#ruby)" stroke-width="9" filter="url(#glow)"/>
+<text x="256" y="207" text-anchor="middle" font-family="Georgia,serif" font-size="78" font-weight="bold" letter-spacing="2" fill="url(#metal)" stroke="#27040b" stroke-width="2">SNT</text>
+<g fill="#10090b" stroke="url(#metal)" stroke-width="7">
+<rect x="132" y="248" width="70" height="60" rx="9"/><rect x="221" y="248" width="70" height="60" rx="9"/><rect x="310" y="248" width="70" height="60" rx="9"/>
+<rect x="132" y="324" width="70" height="52" rx="9"/><rect x="221" y="324" width="70" height="52" rx="9"/><rect x="310" y="324" width="70" height="52" rx="9"/>
 </g>
-<path d="M256 307l10 17 19 3-14 13 3 19-18-9-18 9 3-19-14-13 19-3z" fill="#fff" filter="url(#glow)"/>
-<path d="M89 172v-30a19 19 0 0 1 38 0v30m-38-8h38" fill="none" stroke="url(#silver)" stroke-width="12" stroke-linecap="round"/>
-<path d="M385 172v-30a19 19 0 0 1 38 0v30m-38-8h38" fill="none" stroke="url(#silver)" stroke-width="12" stroke-linecap="round"/>
-<g transform="translate(390 205)" filter="url(#glow)"><path d="M0 44c0-29 17-45 38-45s38 16 38 45l11 27H-11z" fill="#090607" stroke="url(#red)" stroke-width="8"/><path d="M25 79a13 13 0 0 0 26 0" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/></g>
-<text x="256" y="430" text-anchor="middle" font-family="Georgia,serif" font-size="42" font-weight="bold" letter-spacing="2" fill="url(#silver)">CALENDARIO</text>
-<text x="256" y="473" text-anchor="middle" font-family="Georgia,serif" font-size="31" font-style="italic" font-weight="bold" letter-spacing="3" fill="url(#red)">DE EVENTOS</text>
+<path d="m256 258 11 18 21 3-15 15 4 21-21-10-21 10 4-21-15-15 21-3z" fill="url(#ruby)" filter="url(#glow)"/>
+<path d="M75 180v-26a21 21 0 0 1 42 0v26m-42-9h42" fill="none" stroke="url(#metal)" stroke-width="11" stroke-linecap="round"/>
+<path d="M395 180v-26a21 21 0 0 1 42 0v26m-42-9h42" fill="none" stroke="url(#metal)" stroke-width="11" stroke-linecap="round"/>
+<g transform="translate(378 191)" filter="url(#glow)"><path d="M0 54c0-34 18-51 42-51s42 17 42 51l12 28H-12z" fill="#090608" stroke="url(#ruby)" stroke-width="8"/><path d="M27 89a15 15 0 0 0 30 0" fill="none" stroke="url(#metal)" stroke-width="7" stroke-linecap="round"/></g>
+<text x="256" y="460" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" font-weight="800" letter-spacing="6" fill="url(#metal)">EVENTOS</text>
 </svg>
