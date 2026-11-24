@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     const claim = claimRows?.[0];
     if (!claim?.allowed) return res.status(429).json({ error: 'Este evento ya recibió un aviso hace poco.', nextAllowedAt:claim?.next_allowed_at });
 
-    webpush.setVapidDetails(process.env.VAPID_SUBJECT, process.env.VAPID_PUBLIC_KEY, process.env.SNT_VAPID_PRIVATE_ENC);
+    webpush.setVapidDetails(process.env.VAPID_SUBJECT, process.env.VAPID_PUBLIC_KEY, process.env.SNT_VAPID_PRIVATE_KEY_V2);
     const when = new Intl.DateTimeFormat('es',{weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit',hourCycle:'h12'}).format(new Date(event.starts_at));
     const summary = event.short_description || event.description || 'Consulta todos los detalles en SNT.';
     const payload = JSON.stringify({
