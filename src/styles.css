@@ -109,3 +109,13 @@
 .event-bell-button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .event-bell-button:disabled{opacity:.42;cursor:not-allowed}
 .event-alert-control small{font-size:10px;color:#c5aeb4}
+
+/* SNT app analytics */
+.analytics-card{display:grid;gap:12px;text-align:left;padding:18px 20px}
+.analytics-card>span{font-size:11px;letter-spacing:2px;color:#ff7188;font-weight:800}
+.analytics-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.analytics-grid>div{display:grid;gap:5px;padding:12px;border:1px solid #48202a;border-radius:12px;background:linear-gradient(145deg,#1a0b10,#0d0b0d)}
+.analytics-grid strong{font-size:clamp(21px,3vw,30px);color:#fff}
+.analytics-grid small{font-size:11px;line-height:1.35;color:#c8aeb5}
+.analytics-card>small{font-size:10px;color:#a99299}
+@media(max-width:760px){.analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-grid>div:last-child{grid-column:span 2}}
