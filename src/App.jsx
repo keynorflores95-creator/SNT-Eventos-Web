@@ -19,7 +19,7 @@ function Icon({name}) {
  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d={paths[name]||paths.calendar}/></svg>;
 }
 function Logo(){return <div className="brand brand-image"><img src="/snt-icon.svg" alt="Emblema oficial de SNT Eventos"/></div>}
-function EventRow({event,large=false,canAlert=false,onAlert,onEdit,cooldownMs=0,sending=false}) {
+function EventRow({event,large=false,canAlert=false,canEdit=false,onAlert,onEdit,cooldownMs=0,sending=false}) {
  const [tick,setTick]=useState(0);
  useEffect(()=>{const id=setInterval(()=>setTick(x=>x+1),1000);return()=>clearInterval(id)},[]);
  const c=countdown(event.starts_at);
@@ -35,7 +35,7 @@ function EventRow({event,large=false,canAlert=false,onAlert,onEdit,cooldownMs=0,
    </div>
    <div className="event-date"><Icon name="calendar"/><div><strong>{fmt(event.starts_at,{weekday:'short',day:'numeric',month:'short'})}</strong><span>{fmt(event.starts_at,{hour:'numeric',minute:'2-digit',hourCycle:'h12'})}</span><small>Tu hora local</small></div></div>
    <div className="count-box"><small>{past?'Comenzó':'Inicia en'}</small><strong>{past?'En curso':c.days?c.days+'d '+c.hours+'h':c.hours+'h '+c.mins+'m'}</strong><em>{!past&&c.days===0?String(c.secs).padStart(2,'0')+' s':''}</em></div>
-   {event.roblox_url&&<a className="event-link" href={event.roblox_url} target="_blank" rel="noreferrer">Abrir Roblox ↗</a>}{canAlert&&<button type="button" className="outline-button event-edit-button" onClick={()=>onEdit?.(event)}>✎ Editar</button>}
+   {event.roblox_url&&<a className="event-link" href={event.roblox_url} target="_blank" rel="noreferrer">Abrir Roblox ↗</a>}{canEdit&&<button type="button" className="outline-button event-edit-button" onClick={()=>onEdit?.(event)}>✎ Editar</button>}
  </article>
 }
 export default function App(){
@@ -162,7 +162,7 @@ export default function App(){
    </nav></section>}
    {page==='home'&&<>{profile?.role==='owner'&&<div className="device-count-card analytics-card"><span>ESTADÍSTICAS SNT</span><div className="analytics-grid"><div><strong>{appStats?.total_devices??'—'}</strong><small>Dispositivos visitantes</small></div><div><strong>{appStats?.total_visits??'—'}</strong><small>Visitas registradas</small></div><div><strong>{appStats?.installed_devices??'—'}</strong><small>Instalaciones detectadas</small></div><div><strong>{appStats?.active_today??'—'}</strong><small>Activos últimas 24 h</small></div><div><strong>{registeredDevices??'—'}</strong><small>Con avisos activados</small></div></div><small>Se actualiza automáticamente cada minuto · cifras aproximadas por dispositivo/navegador</small></div>}<section className="hero-banner"><div className="hero-lines"/><Logo/><div className="hero-copy"><span>CALENDARIO DE ACTIVIDADES</span><h2>La próxima leyenda<br/>se escribe en equipo.</h2></div><div className="hero-orbit">SNT<br/><b>✦</b></div></section>
     <div className="section-heading"><div><span className="eyebrow">NO TE LO PIERDAS</span><h2>Próximos eventos</h2></div><button className="text-button" onClick={()=>setPage('events')}>Ver todos <b>→</b></button></div>
-    {upcoming.length?<div className="events-list">{upcoming.slice(0,4).map(e=><EventRow key={e.id} event={e} canAlert={admin} onEdit={openEditEvent} onAlert={sendEventPushAlert} cooldownMs={(pushCooldowns[e.id]||0)-pushClock} sending={sendingEventId===e.id}/>)}</div>:<div className="empty-state"><Icon name="calendar"/><h3>Aún no hay eventos publicados</h3><p>Cuando el equipo SNT programe una actividad, aparecerá aquí.</p></div>}
+    {upcoming.length?<div className="events-list">{upcoming.slice(0,4).map(e=><EventRow key={e.id} event={e} canAlert={profile?.role==='owner'} canEdit={admin} onEdit={openEditEvent} onAlert={sendEventPushAlert} cooldownMs={(pushCooldowns[e.id]||0)-pushClock} sending={sendingEventId===e.id}/>)}</div>:<div className="empty-state"><Icon name="calendar"/><h3>Aún no hay eventos publicados</h3><p>Cuando el equipo SNT programe una actividad, aparecerá aquí.</p></div>}
     <div className="bottom-grid"><section className="panel"><div className="panel-title"><Icon name="bell"/><h3>Notificaciones SNT</h3></div><p className="muted">Recibe avisos oficiales del clan directamente en tu dispositivo.</p><button className="primary-button" onClick={enableNotifications}>Activar avisos</button><small className="ios-install-hint">En iPhone: Safari → Compartir → Añadir a pantalla de inicio. Después abre SNT desde el icono instalado.</small></section><section className="panel"><div className="panel-title"><Icon name="bell"/><h3>Información del clan</h3></div><p className="muted">Consulta esta página para enterarte de torneos, desafíos y reuniones oficiales. Los horarios se muestran automáticamente según la zona horaria de tu dispositivo.</p><div className="timezone-pill"><Icon name="clock"/> Zona detectada: <b>{tz}</b></div></section><section className="panel feature-panel"><span className="eyebrow">SIEMPRE PREPARADOS</span><h3>Una comunidad.<br/>Un mismo objetivo.</h3><p>Nos vemos en el próximo evento.</p></section></div>
    </>}
 
