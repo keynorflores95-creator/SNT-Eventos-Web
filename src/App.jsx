@@ -9,6 +9,7 @@ const demoEvents = [
 function future(days, hour) { const d = new Date(); d.setDate(d.getDate()+days); d.setHours(hour,0,0,0); return d.toISOString(); }
 // Evita combinar dateStyle/timeStyle con opciones individuales de Intl, lo que lanza RangeError y deja la app en blanco.
 const fmt = (date, options) => new Intl.DateTimeFormat(undefined, options && Object.keys(options).length ? options : {dateStyle:'medium',timeStyle:'short'}).format(new Date(date));
+const EVENT_GRACE_PERIOD_MS = 60 * 60 * 1000; // Mantiene el evento visible y accesible durante 1 hora tras su inicio.
 function countdown(date) {
   const ms = Math.max(0,new Date(date).getTime()-Date.now());
   const days=Math.floor(ms/86400000), hours=Math.floor(ms%86400000/3600000), mins=Math.floor(ms%3600000/60000), secs=Math.floor(ms%60000/1000);
@@ -106,7 +107,7 @@ export default function App(){
    return()=>subscription.unsubscribe();
  },[]);
  useEffect(()=>{async function load(){if(!user||!supabase){setProfile(null);return}const {data}=await supabase.from('profiles').select('*').eq('id',user.id).maybeSingle();setProfile(data)}load()},[user]);
- const upcoming=useMemo(()=>events.filter(e=>e.status==='published'&&new Date(e.starts_at)>new Date(Date.now()-3600000)).sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at)),[events]);
+ const upcoming=useMemo(()=>events.filter(e=>e.status==='published'&&new Date(e.starts_at).getTime()+EVENT_GRACE_PERIOD_MS>clock.getTime()).sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at)),[events,clock]);
  async function login(e){e.preventDefault();setBusy(true);setError('');const {error}=await supabase.auth.signInWithPassword({email,password});setBusy(false);if(error)setError(error.message);else{setShowLogin(false);setPassword('');setResetMode(false)}}
  async function sendReset(e){e.preventDefault();setBusy(true);setError('');const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:APP_URL});setBusy(false);if(error)setError(error.message);else setResetSent(true)}
  async function saveNewPassword(e){e.preventDefault();setBusy(true);setError('');const {error}=await supabase.auth.updateUser({password:newPassword});setBusy(false);if(error)setError(error.message);else{setNotice('Contraseña actualizada. Ya puedes iniciar sesión.');setResetMode(false);setShowLogin(false);setNewPassword('')}}
