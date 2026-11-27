@@ -36,6 +36,10 @@ export default async function handler(req, res) {
     if (claimError) throw claimError;
 
     const report = [];
+    // Si un endpoint devuelve 410/404/403, no volver a intentarlo en los demás
+    // recordatorios del mismo lote de cron: la lista de suscripciones viene
+    // incluida en cada batch y podría contener una copia antigua.
+    const invalidSubscriptionsThisRun = new Set();
     for (const batch of batches || []) {
       const scheduledAt = new Date(batch.scheduled_at);
       const remainingMinutes = Math.max(0, Math.round(
@@ -55,7 +59,8 @@ export default async function handler(req, res) {
         reminderLabel: batch.reminder_label
       });
 
-      const targets = Array.isArray(batch.subscriptions) ? batch.subscriptions : [];
+      const targets = (Array.isArray(batch.subscriptions) ? batch.subscriptions : [])
+        .filter(row => !invalidSubscriptionsThisRun.has(row.id));
       const results = await Promise.allSettled(targets.map(row =>
         webpush.sendNotification(row.subscription, payload, { TTL: 60 * 60 * 12, urgency: 'high' })
       ));
@@ -71,7 +76,10 @@ export default async function handler(req, res) {
           const status = Number(result.reason?.statusCode || 0);
           const key = status ? String(status) : 'network';
           errorsByStatus[key] = (errorsByStatus[key] || 0) + 1;
-          if (status === 403 || status === 404 || status === 410) invalidIds.push(targets[i].id);
+          if (status === 403 || status === 404 || status === 410) {
+            invalidIds.push(targets[i].id);
+            invalidSubscriptionsThisRun.add(targets[i].id);
+          }
         }
       }
 
