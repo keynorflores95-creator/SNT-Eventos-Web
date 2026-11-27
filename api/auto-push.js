@@ -45,7 +45,7 @@ export default async function handler(req, res) {
       const summary = batch.short_description || batch.description || 'Consulta los detalles en SNT Eventos.';
       const payload = JSON.stringify({
         title: '⏰ SNT · ' + batch.title,
-        body: batch.reminder_label ? (['01:00','08:00','12:00','16:00','19:00'].includes(batch.reminder_label) ? 'Hoy tenemos evento. ¡Te esperamos! ' : '¡Tu evento comienza en ' + countdown + '! ') + summary.slice(0, 95) : '¡Tu evento comienza en ' + countdown + '! ' + summary.slice(0, 95),
+        body: batch.reminder_label ? (String(batch.reminder_label || '').startsWith('Día ') ? 'Hoy tenemos evento. ¡Te esperamos! ' : '¡Tu evento comienza en ' + countdown + '! ') + summary.slice(0, 95) : '¡Tu evento comienza en ' + countdown + '! ' + summary.slice(0, 95),
         url: '/?event=' + encodeURIComponent(batch.event_id),
         image: batch.image_url || undefined,
         icon: '/snt-icon.svg',
